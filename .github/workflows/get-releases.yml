@@ -1,0 +1,28 @@
+name: get Exastro Suite releases
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '30 14 * * *' # 23:30 in JST
+
+jobs:
+  get_releases:
+    name: get releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - name: save release information
+        run: |
+            pip3 install -r ./requirements.txt
+            ./github-api-releases.py exastro-suite it-automation
+            ./github-api-releases.py exastro-suite Settings-CloudSystemTemplate-1st
+
+      - name: push to GitHub
+        run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "GitHub Actions `TZ='Asia/Tokyo' date`"
+            git push
