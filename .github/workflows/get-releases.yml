@@ -17,6 +17,7 @@ jobs:
         run: |
             pip3 install -r ./requirements.txt
             ./github-api-releases.py exastro-suite it-automation
+            ./github-api-releases.py exastro-suite oase
             ./github-api-releases.py exastro-suite Settings-CloudSystemTemplate-1st
 
       - name: push to GitHub
