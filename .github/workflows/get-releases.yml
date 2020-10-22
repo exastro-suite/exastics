@@ -13,12 +13,20 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v2
 
-      - name: save release information
-        run: |
-            pip3 install -r ./requirements.txt
-            ./github-api-releases.py exastro-suite it-automation
-            ./github-api-releases.py exastro-suite oase
-            ./github-api-releases.py exastro-suite Settings-CloudSystemTemplate-1st
+      - name: install python libraries
+        run: pip3 install -r ./requirements.txt
+        
+      - name: get releases (it-automation)
+        continue-on-error: true
+        run: ./github-api-releases.py exastro-suite it-automation
+
+      - name: get releases (oase)
+        continue-on-error: true
+        run: ./github-api-releases.py exastro-suite oase
+        
+      - name: get releases (Settings-CloudSystemTemplate-1st)
+        continue-on-error: true
+        run: ./github-api-releases.py exastro-suite Settings-CloudSystemTemplate-1st
 
       - name: push to GitHub
         run: |
