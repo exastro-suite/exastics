@@ -28,6 +28,18 @@ jobs:
         continue-on-error: true
         run: ./github-api-releases.py exastro-suite Settings-CloudSystemTemplate-1st
 
+      - name: create chart data (it-automation)
+        continue-on-error: true
+        run: ./create-chart-data-github-download-count.py ./it-automation/ ./docs/assets/chart-data/it-automation-github-download-count.json
+        
+      - name: create chart data (oase)
+        continue-on-error: true
+        run: ./create-chart-data-github-download-count.py ./oase/ ./docs/assets/chart-data/oase-github-download-count.json
+
+      - name: create chart data (Settings-CloudSystemTemplate-1st)
+        continue-on-error: true
+        run: ./create-chart-data-github-download-count.py ./Settings-CloudSystemTemplate-1st/ ./docs/assets/chart-data/Settings-CloudSystemTemplate-1st-github-download-count.json
+
       - name: push to GitHub
         run: |
             git config user.name github-actions
