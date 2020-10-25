@@ -14,13 +14,19 @@ function renderChartContainerTemplate(content, chartIndexEntry, chartNumber) {
 
 
 function attachChart(context, chartData) {
+    var datasets = [];
+    for (entry of chartData) {
+        datasets.push({
+            label: entry.series,
+            data: entry.points,
+            fill: false
+        });
+    }
+
     const myLineChart = new Chart(context, {
         type: 'line',
         data: {
-            datasets: [{
-                label: chartData[0].series,
-                data: chartData[0].points
-            }]
+            datasets: datasets
         },
         options: {
             scales: {
@@ -35,6 +41,14 @@ function attachChart(context, chartData) {
                         beginAtZero: true
                     }
                 }]
+            },
+            legend: {
+                position: 'right'
+            },
+            plugins: {
+                colorschemes: {
+                    scheme: 'brewer.Paired12'
+                }
             }
         }
     });
