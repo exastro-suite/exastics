@@ -4,6 +4,10 @@
         "data_file": "assets/chart-data/it-automation-github-download-count.json"
     },
     {
+        "caption": "Exastro IT Automation pull count",
+        "data_file": "assets/chart-data/it-automation-dockerhub-pull-count.json"
+    },
+    {
         "caption": "Exastro OASE download count",
         "data_file": "assets/chart-data/oase-github-download-count.json"
     },

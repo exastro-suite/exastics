@@ -2,6 +2,7 @@
 
 import datetime
 import dateutil.parser
+import exastics.chartdata
 import json
 import pathlib
 import os
@@ -22,37 +23,6 @@ class GitHubAsset:
     def __init__(self, asset):
         self.id = asset['id']
         self.download_count = asset['download_count']
-
-
-def get_datetime_from_filename(filename):
-    return_value = None
-
-    name, ext = os.path.splitext(filename)
-    if ext == '.json':
-        try:
-            dateutil.parser.isoparse(name)
-            return_value = name
-        except ValueError:
-            pass
-    
-    return return_value
-
-
-def get_github_releases(base_dir):
-    for dirpath, _, filenames in os.walk(base_dir):
-        for filename in filenames:
-            dt = get_datetime_from_filename(filename)
-            if not dt:
-                continue
-
-            try:
-                with open(pathlib.PurePath(dirpath, filename)) as file:
-                    github_releases = json.load(file)
-            except Exception as e:
-                print(str(e), type(e))
-                continue
-
-            yield (dt, github_releases)
 
 
 def append_tag_time_series(tag_time_series, dt, github_tag):
@@ -118,7 +88,7 @@ if __name__ == '__main__':
     output_file = sys.argv[2]
 
     tag_time_series = {}
-    for dt, github_releases in get_github_releases(base_dir):
+    for dt, github_releases in exastics.chartdata.get_datetime_and_json_data(base_dir):
         collect_tag_time_series(tag_time_series, dt, github_releases)
 
     chart_data = create_chart_data(tag_time_series)

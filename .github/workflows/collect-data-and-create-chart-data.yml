@@ -1,0 +1,58 @@
+name: workflow (collect data and create chart data)
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '30 14 * * *' # 23:30 in JST
+
+jobs:
+  collect_data_and_create_chart_data:
+    name: job (collect data and create chart data)
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - name: install python libraries
+        run: pip3 install -r ./requirements.txt
+        
+      - name: get GitHub releases data (it-automation)
+        continue-on-error: true
+        run: python3 -m exastics.publish_github_api_releases exastro-suite it-automation
+
+      - name: get GitHub releases data (oase)
+        continue-on-error: true
+        run: python3 -m exastics.publish_github_api_releases exastro-suite oase
+        
+      - name: get GitHub releases data (Settings-CloudSystemTemplate-1st)
+        continue-on-error: true
+        run: python3 -m exastics.publish_github_api_releases exastro-suite Settings-CloudSystemTemplate-1st
+
+      - name: get DockerHub repository data (it-automation)
+        continue-on-error: true
+        run: python3 -m exastics.publish_dockerhub_api_repository exastro it-automation
+
+      - name: create GitHub download count chart data (it-automation)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_github_download_count ./it-automation/github-releases ./docs/assets/chart-data/it-automation-github-download-count.json
+        
+      - name: create GitHub download count chart data (oase)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_github_download_count ./oase/github-releases ./docs/assets/chart-data/oase-github-download-count.json
+
+      - name: create GitHub download count chart data (Settings-CloudSystemTemplate-1st)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_github_download_count ./Settings-CloudSystemTemplate-1st/github-releases ./docs/assets/chart-data/Settings-CloudSystemTemplate-1st-github-download-count.json
+
+      - name: create DockerHub pull count chart data (it-automation)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_dockerhub_pull_count ./it-automation/dockerhub-repository/ ./docs/assets/chart-data/it-automation-dockerhub-pull-count.json
+
+      - name: push to GitHub
+        run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git status
+            git commit -m "GitHub Actions `TZ='Asia/Tokyo' date`"
+            git push
