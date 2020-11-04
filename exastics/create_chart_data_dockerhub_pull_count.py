@@ -12,10 +12,13 @@ if __name__ == '__main__':
     chart_data = [
         {
             'series': 'pull_count',
-            'points': list(map(
-                lambda obj: {'x': obj[0], 'y': obj[1]['pull_count']},
-                exastics.chartdata.get_datetime_and_json_data(base_dir)
-            ))
+            'points': sorted(
+                list(map(
+                    lambda obj: {'x': obj[0], 'y': obj[1]['pull_count']},
+                    exastics.chartdata.get_datetime_and_json_data(base_dir)
+                )),
+                key=lambda obj: obj['x']
+            )
         }
     ]
 
