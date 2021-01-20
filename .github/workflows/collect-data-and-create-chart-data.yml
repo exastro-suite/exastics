@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '30 14 * * *' # 23:30 in JST
+    - cron: '00 14 * * *' # 23:00 in JST
 
 jobs:
   collect_data_and_create_chart_data:
