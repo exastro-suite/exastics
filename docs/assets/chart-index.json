@@ -12,6 +12,10 @@
         "data_file": "assets/chart-data/oase-github-download-count.json"
     },
     {
+        "caption": "Exastro OASE pull count",
+        "data_file": "oase-dockerhub-pull-count.json"
+    },
+    {
         "caption": "Settings - Cloud System Template 1st",
         "data_file": "assets/chart-data/Settings-CloudSystemTemplate-1st-github-download-count.json"
     }
