@@ -24,6 +24,10 @@ jobs:
         continue-on-error: true
         run: python3 -m exastics.publish_github_api_releases exastro-suite oase
         
+      - name: get GitHub releases data (epoch)
+        continue-on-error: true
+        run: python3 -m exastics.publish_github_api_releases exastro-suite epoch
+        
       - name: get GitHub releases data (Settings-CloudSystemTemplate-1st)
         continue-on-error: true
         run: python3 -m exastics.publish_github_api_releases exastro-suite Settings-CloudSystemTemplate-1st
@@ -36,6 +40,10 @@ jobs:
         continue-on-error: true
         run: python3 -m exastics.publish_dockerhub_api_repository exastro oase
 
+      - name: get DockerHub repository data (epoch)
+        continue-on-error: true
+        run: python3 -m exastics.publish_dockerhub_api_repository exastro epoch
+
       - name: create GitHub download count chart data (it-automation)
         continue-on-error: true
         run: python3 -m exastics.create_chart_data_github_download_count ./it-automation/github-releases ./docs/assets/chart-data/it-automation-github-download-count.json
@@ -43,6 +51,10 @@ jobs:
       - name: create GitHub download count chart data (oase)
         continue-on-error: true
         run: python3 -m exastics.create_chart_data_github_download_count ./oase/github-releases ./docs/assets/chart-data/oase-github-download-count.json
+
+      - name: create GitHub download count chart data (epoch)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_github_download_count ./epoch/github-releases ./docs/assets/chart-data/epoch-github-download-count.json
 
       - name: create GitHub download count chart data (Settings-CloudSystemTemplate-1st)
         continue-on-error: true
@@ -55,7 +67,11 @@ jobs:
       - name: create DockerHub pull count chart data (oase)
         continue-on-error: true
         run: python3 -m exastics.create_chart_data_dockerhub_pull_count ./oase/dockerhub-repository/ ./docs/assets/chart-data/oase-dockerhub-pull-count.json
-        
+
+      - name: create DockerHub pull count chart data (epoch)
+        continue-on-error: true
+        run: python3 -m exastics.create_chart_data_dockerhub_pull_count ./epoch/dockerhub-repository/ ./docs/assets/chart-data/epoch-dockerhub-pull-count.json
+
       - name: push to GitHub
         run: |
             git config user.name github-actions

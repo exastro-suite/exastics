@@ -16,6 +16,14 @@
         "data_file": "assets/chart-data/oase-dockerhub-pull-count.json"
     },
     {
+        "caption": "Exastro EPOCH download count",
+        "data_file": "assets/chart-data/epoch-github-download-count.json"
+    },
+    {
+        "caption": "Exastro EPOCH pull count",
+        "data_file": "assets/chart-data/epoch-dockerhub-pull-count.json"
+    },
+    {
         "caption": "Settings - Cloud System Template 1st",
         "data_file": "assets/chart-data/Settings-CloudSystemTemplate-1st-github-download-count.json"
     }
