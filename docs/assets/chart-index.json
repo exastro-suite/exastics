@@ -17,7 +17,7 @@
     },
     {
         "caption": "Exastro EPOCH download count",
-        "data_file": "assets/chart-data/epochui-github-download-count.json"
+        "data_file": "assets/chart-data/epoch-github-download-count.json"
     },
     {
         "caption": "Exastro EPOCH pull count",
