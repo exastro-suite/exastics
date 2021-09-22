@@ -42,7 +42,7 @@ jobs:
 
       - name: get DockerHub repository data (epoch)
         continue-on-error: true
-        run: python3 -m exastics.publish_dockerhub_api_repository exastro epoch
+        run: python3 -m exastics.publish_dockerhub_api_repository exastro epochui
 
       - name: create GitHub download count chart data (it-automation)
         continue-on-error: true
@@ -70,7 +70,7 @@ jobs:
 
       - name: create DockerHub pull count chart data (epoch)
         continue-on-error: true
-        run: python3 -m exastics.create_chart_data_dockerhub_pull_count ./epoch/dockerhub-repository/ ./docs/assets/chart-data/epoch-dockerhub-pull-count.json
+        run: python3 -m exastics.create_chart_data_dockerhub_pull_count ./epochui/dockerhub-repository/ ./docs/assets/chart-data/epochui-dockerhub-pull-count.json
 
       - name: push to GitHub
         run: |
