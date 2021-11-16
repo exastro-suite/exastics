@@ -21,7 +21,7 @@
     },
     {
         "caption": "Exastro EPOCH pull count",
-        "data_file": "assets/chart-data/epochui-dockerhub-pull-count.json"
+        "data_file": "assets/chart-data/epoch-ui-dockerhub-pull-count.json"
     },
     {
         "caption": "Settings - Cloud System Template 1st",
