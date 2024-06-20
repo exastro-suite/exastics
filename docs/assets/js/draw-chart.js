@@ -13,6 +13,37 @@ function renderChartContainerTemplate(content, chartIndexEntry, chartNumber) {
 }
 
 
+function trimChartData(forPastDays, chartDataOrigin) {
+    if (forPastDays == 99999) {
+        return chartDataOrigin;
+    }
+
+    var chartDataTrimed = [];
+    dateTrimed = new Date();
+    dateTrimed.setDate(dateTrimed.getDate() - forPastDays);
+
+    for (entryOrigin of chartDataOrigin) {
+        entryTrimed = {
+            series : entryOrigin.series,
+            points : []
+        };
+
+        var yBase = -1;
+        for (pointOrigin of entryOrigin["points"]) {
+            dateOrigin = new Date(pointOrigin.x);
+            if (dateOrigin > dateTrimed) {
+                if (yBase == -1) yBase = pointOrigin.y;
+                pointOrigin.y = pointOrigin.y - yBase;
+                entryTrimed.points.push(pointOrigin);
+            }
+        }
+        chartDataTrimed.push(entryTrimed);
+    }
+
+    return chartDataTrimed;
+}
+
+
 function attachChart(context, chartData) {
     var datasets = [];
     for (entry of chartData) {
@@ -56,6 +87,9 @@ function attachChart(context, chartData) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    const saveState = sessionStorage.getItem('forThePastDates');
+    const forThePastDates = saveState ? parseInt(saveState, 10) : 99999;
+
     const parentNode = document.querySelector('#chart-plain');
     const templateContent = document.querySelector('#chart-container-template').content;
 
@@ -69,10 +103,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 fetch(chartIndex[i].data_file)
                     .then(response => response.json())
+                    .then(chartDataOrigin => trimChartData(forThePastDates, chartDataOrigin))
                     .then(chartData => {        
                         const context = document.getElementById("chart-canvas-" + i);
                         attachChart(context, chartData)
                     });
             }
         });
+});
+
+var forThePast030Dates = document.getElementById('forThePast030Dates');
+forThePast030Dates.addEventListener('click', () => {
+    sessionStorage.setItem('forThePastDates', '30');
+    location.reload();
+});
+
+var forThePast060Dates = document.getElementById('forThePast060Dates');
+forThePast060Dates.addEventListener('click', () => {
+    sessionStorage.setItem('forThePastDates', '60');
+    location.reload();
+});
+
+var forThePast180Dates = document.getElementById('forThePast180Dates');
+forThePast180Dates.addEventListener('click', () => {
+    sessionStorage.setItem('forThePastDates', '180');
+    location.reload();
+});
+
+var forThePastAllDates = document.getElementById('forThePastAllDates');
+forThePastAllDates.addEventListener('click', () => {
+    sessionStorage.removeItem('forThePastDates');
+    location.reload();
 });
