@@ -1,11 +1,15 @@
 [
     {
-        "caption": "Exastro IT Automation download count",
+        "caption": "Exastro IT Automation v1 download count",
         "data_file": "assets/chart-data/it-automation-github-download-count.json"
     },
     {
-        "caption": "Exastro IT Automation pull count",
+        "caption": "Exastro IT Automation v1 pull count",
         "data_file": "assets/chart-data/it-automation-dockerhub-pull-count.json"
+    },
+    {
+        "caption": "Exastro IT Automation v2 pull count",
+        "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count.json"
     },
     {
         "caption": "Exastro OASE download count",
