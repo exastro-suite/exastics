@@ -1,3 +1,4 @@
 python-dateutil
 pytz
 requests
+urllib3>=2.7.0 # not directly required, pinned by Snyk to avoid a vulnerability
