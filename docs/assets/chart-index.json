@@ -12,6 +12,10 @@
         "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count.json"
     },
     {
+        "caption": "Exastro IT Automation v2 weekly pull increase",
+        "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count-weekly.json"
+    },
+    {
         "caption": "Exastro OASE download count",
         "data_file": "assets/chart-data/oase-github-download-count.json"
     },
