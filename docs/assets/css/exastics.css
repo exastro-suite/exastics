@@ -5,10 +5,10 @@
 
 .exastics-chart-container {
     border: 1px solid #000000;
-    width:500px;
-    height:350px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    width:800px;
+    height:450px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .exastics-chart-caption {
