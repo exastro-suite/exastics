@@ -12,8 +12,7 @@ function renderChartContainerTemplate(content, chartIndexEntry, chartNumber) {
     return content;
 }
 
-
-function trimChartData(forPastDays, chartDataOrigin) {
+function trimChartData(forPastDays, chartDataOrigin, normalize = true) {
     if (forPastDays == 99999) {
         return chartDataOrigin;
     }
@@ -31,9 +30,14 @@ function trimChartData(forPastDays, chartDataOrigin) {
         var yBase = -1;
         for (pointOrigin of entryOrigin["points"]) {
             dateOrigin = new Date(pointOrigin.x);
+
             if (dateOrigin > dateTrimed) {
-                if (yBase == -1) yBase = pointOrigin.y;
-                pointOrigin.y = pointOrigin.y - yBase;
+
+                if (normalize) {
+                    if (yBase == -1) yBase = pointOrigin.y;
+                    pointOrigin.y = pointOrigin.y - yBase;
+                }
+
                 entryTrimed.points.push(pointOrigin);
             }
         }
@@ -43,9 +47,8 @@ function trimChartData(forPastDays, chartDataOrigin) {
     return chartDataTrimed;
 }
 
-
-function attachChart(context, chartData) {
-    var datasets = [];
+function attachChart(context, chartData, chartType = 'line') {
+        var datasets = [];
     for (entry of chartData) {
         datasets.push({
             label: entry.series,
@@ -55,7 +58,8 @@ function attachChart(context, chartData) {
     }
 
     const myLineChart = new Chart(context, {
-        type: 'line',
+
+        type: chartType,
         data: {
             datasets: datasets
         },
@@ -103,10 +107,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 fetch(chartIndex[i].data_file)
                     .then(response => response.json())
-                    .then(chartDataOrigin => trimChartData(forThePastDates, chartDataOrigin))
-                    .then(chartData => {        
+                    .then(chartDataOrigin => {
+
+                        return trimChartData(
+                            forThePastDates,
+                            chartDataOrigin,
+                            chartIndex[i].trim !== false
+                        );
+                    })
+                    .then(chartData => {
+        
                         const context = document.getElementById("chart-canvas-" + i);
-                        attachChart(context, chartData)
+                        attachChart(
+                            context,
+                            chartData,
+                            chartIndex[i].chart_type || 'line'
+                        )
                     });
             }
         });
