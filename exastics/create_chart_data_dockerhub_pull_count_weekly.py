@@ -10,17 +10,13 @@ if __name__ == '__main__':
     base_dir = sys.argv[1]
     output_file = sys.argv[2]
 
-    #
     # 日次データ取得
-    #
     history = sorted(
         list(exastics.chartdata.get_datetime_and_json_data(base_dir)),
         key=lambda obj: obj[0]
     )
 
-    #
     # 週ごとの最終pull_countを保持
-    #
     weekly_data = {}
 
     for dt_str, data in history:
@@ -29,7 +25,6 @@ if __name__ == '__main__':
 
         # ISO週番号
         iso_year, iso_week, _ = dt.isocalendar()
-
         week_key = f"{iso_year}-{iso_week:02d}"
 
         # 同じ週なら後ろのデータで上書き
@@ -39,17 +34,13 @@ if __name__ == '__main__':
             'pull_count': data['pull_count']
         }
 
-    #
     # 週順に並べ替え
-    #
     weekly_entries = sorted(
         weekly_data.values(),
         key=lambda obj: obj['date']
     )
 
-    #
     # 前週との差分計算
-    #
     points = []
 
     previous_pull_count = None
@@ -59,12 +50,13 @@ if __name__ == '__main__':
         current_pull_count = entry['pull_count']
 
         if previous_pull_count is None:
-            weekly_increase = 0
-        else:
-            weekly_increase = (
-                current_pull_count -
-                previous_pull_count
-            )
+            previous_pull_count = current_pull_count
+            continue
+
+        weekly_increase = (
+            current_pull_count -
+            previous_pull_count
+        )
 
         points.append({
             'x': entry['date'].strftime('%Y-%m-%d'),
