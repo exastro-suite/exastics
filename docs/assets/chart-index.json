@@ -8,12 +8,14 @@
         "data_file": "assets/chart-data/it-automation-dockerhub-pull-count.json"
     },
     {
-        "caption": "Exastro IT Automation v2 pull count",
+        "caption": "Exastro IT Automation migration pull count",
         "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count.json"
     },
     {
-        "caption": "Exastro IT Automation v2 weekly pull increase",
-        "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count-weekly.json"
+        "caption": "Exastro IT Automation migration weekly pull increase",
+        "data_file": "assets/chart-data/exastro-it-automation-dockerhub-pull-count-weekly.json",
+        "trim": false,
+        "chart_type": "bar"
     },
     {
         "caption": "Exastro OASE download count",
