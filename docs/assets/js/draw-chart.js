@@ -12,8 +12,7 @@ function renderChartContainerTemplate(content, chartIndexEntry, chartNumber) {
     return content;
 }
 
-
-function trimChartData(forPastDays, chartDataOrigin) {
+function trimChartData(forPastDays, chartDataOrigin, normalize = true) {
     if (forPastDays == 99999) {
         return chartDataOrigin;
     }
@@ -31,9 +30,14 @@ function trimChartData(forPastDays, chartDataOrigin) {
         var yBase = -1;
         for (pointOrigin of entryOrigin["points"]) {
             dateOrigin = new Date(pointOrigin.x);
+
             if (dateOrigin > dateTrimed) {
-                if (yBase == -1) yBase = pointOrigin.y;
-                pointOrigin.y = pointOrigin.y - yBase;
+
+                if (normalize) {
+                    if (yBase == -1) yBase = pointOrigin.y;
+                    pointOrigin.y = pointOrigin.y - yBase;
+                }
+
                 entryTrimed.points.push(pointOrigin);
             }
         }
@@ -43,9 +47,62 @@ function trimChartData(forPastDays, chartDataOrigin) {
     return chartDataTrimed;
 }
 
+function attachChart(context, chartData, chartType = 'line') {
+    // 週次増加グラフ（棒グラフ）
+    if (chartType === 'bar') {
 
-function attachChart(context, chartData) {
+        const labels = chartData[0].points.map(point => {
+            const date = new Date(point.x);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+        });
+
+        const datasets = chartData.map(entry => ({
+            label: entry.series,
+            data: entry.points.map(point => point.y),
+            fill: false
+        }));
+
+        new Chart(context, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    position: 'right'
+                },
+                plugins: {
+                    colorschemes: {
+                        scheme: 'brewer.Paired12'
+                    }
+                }
+            }
+        });
+
+        return;
+    }
+
+    // 既存の折れ線グラフ
     var datasets = [];
+
     for (entry of chartData) {
         datasets.push({
             label: entry.series,
@@ -54,8 +111,8 @@ function attachChart(context, chartData) {
         });
     }
 
-    const myLineChart = new Chart(context, {
-        type: 'line',
+    new Chart(context, {
+        type: chartType,
         data: {
             datasets: datasets
         },
@@ -85,7 +142,6 @@ function attachChart(context, chartData) {
     });
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const saveState = sessionStorage.getItem('forThePastDates');
     const forThePastDates = saveState ? parseInt(saveState, 10) : 99999;
@@ -103,10 +159,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 fetch(chartIndex[i].data_file)
                     .then(response => response.json())
-                    .then(chartDataOrigin => trimChartData(forThePastDates, chartDataOrigin))
-                    .then(chartData => {        
+                    .then(chartDataOrigin => {
+
+                        return trimChartData(
+                            forThePastDates,
+                            chartDataOrigin,
+                            chartIndex[i].trim !== false
+                        );
+                    })
+                    .then(chartData => {
+        
                         const context = document.getElementById("chart-canvas-" + i);
-                        attachChart(context, chartData)
+                        attachChart(
+                            context,
+                            chartData,
+                            chartIndex[i].chart_type || 'line'
+                        )
                     });
             }
         });
