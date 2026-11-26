@@ -48,7 +48,61 @@ function trimChartData(forPastDays, chartDataOrigin, normalize = true) {
 }
 
 function attachChart(context, chartData, chartType = 'line') {
-        var datasets = [];
+    // 週次増加グラフ（棒グラフ）
+    if (chartType === 'bar') {
+
+        const labels = chartData[0].points.map(point => {
+            const date = new Date(point.x);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+        });
+
+        const datasets = chartData.map(entry => ({
+            label: entry.series,
+            data: entry.points.map(point => point.y),
+            fill: false
+        }));
+
+        new Chart(context, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    position: 'right'
+                },
+                plugins: {
+                    colorschemes: {
+                        scheme: 'brewer.Paired12'
+                    }
+                }
+            }
+        });
+
+        return;
+    }
+
+    // 既存の折れ線グラフ
+    var datasets = [];
+
     for (entry of chartData) {
         datasets.push({
             label: entry.series,
@@ -57,8 +111,7 @@ function attachChart(context, chartData, chartType = 'line') {
         });
     }
 
-    const myLineChart = new Chart(context, {
-
+    new Chart(context, {
         type: chartType,
         data: {
             datasets: datasets
@@ -88,7 +141,6 @@ function attachChart(context, chartData, chartType = 'line') {
         }
     });
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const saveState = sessionStorage.getItem('forThePastDates');
